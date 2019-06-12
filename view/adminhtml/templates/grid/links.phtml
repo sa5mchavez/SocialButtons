@@ -1,0 +1,29 @@
+<table class="table table-striped table-bordered">
+    <tbody>
+    <tr>
+        <th>Original Link</th>
+        <th>Short Bitlink</th>
+        <th></th>
+    </tr>
+    <?php foreach($block->getLinks() as $item):?>
+    <tr>
+        <td>
+            <?= $item->getUrl() ?>
+        </td>
+        <td>
+            <?= $item->getUrlShort() ?>
+        </td>
+        <td>
+            <form data-mage-init='{"validation": {}}' action="<?= $block->getBaseUrl() ?>admindev/socialbuttons/grid/deletelink" method="post">
+                <input type="text" name="link" value="<?= $item->getId() ?>">
+                <button  type="submit" class="button">
+                    <span>Eliminar</span>
+                </button>
+            </form>
+
+        </td>
+    </tr>
+    <?php endforeach; ?>
+
+    </tbody>
+</table>

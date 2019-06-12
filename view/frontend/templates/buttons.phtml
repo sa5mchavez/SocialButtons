@@ -1,0 +1,133 @@
+<?php
+/* @var Pengo\SocialButtons\Block\SocialButtons $block */
+?>
+
+
+<div class="share-button">
+    <span id="share-button">Compartir</span>
+</div>
+
+
+<script>
+    require(['jquery'],function($){
+        $('.social-buttons').hide();
+
+        $('#share-button').click(function(){
+            $('.social-buttons').toggle('fade');
+        })
+    });
+
+</script>
+
+<div class="social-buttons display-inline-block">
+    <?php
+        $currentUrl = $block->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+        $productName = $block->getProductName();
+        $facebook_share = ($block->showFacebookShare() > 0 ? 'true' : 'false');
+        $facebook_count = $block->getFacebookCount();
+        $google_count = $block->getGPlusCount();
+    ?>
+    <?php if ($block->bitlyOn()):
+        $url = $block->getUrlShort($block->escapeUrl($currentUrl));
+    else:
+        $url = $block->escapeUrl($currentUrl);
+    endif ?>
+
+    <?php if (!$block->isLocal()):?>
+        <?php if ($block->showFacebook()):?>
+            <div class="fb-like" data-href="<?= $block->escapeUrl($currentUrl); ?>" data-layout="button<?= ($facebook_count>0 ? '_count' : ''); ?>" data-action="like" data-show-faces="true" data-share="<?= $facebook_share; ?>"></div>
+        <?php endif ?>
+        <?php if ($block->showTwitter()):?>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <?php endif ?>
+        <?php if ($block->showGPlus()):?>
+            <div class="g-plusone" data-size="medium" <?= ($google_count >0 ? '' : 'data-annotation="none"'); ?> ></div>
+        <?php endif ?>
+        <?php if ($block->showWhatsapp()):?>
+            <li>
+                <a class ="share-whatsapp" href="https://api.whatsapp.com/send?text=<?= urlencode($block->escapeUrl($currentUrl)); ?>" target="_blank" >Whatsapp</a>
+            </li>
+        <?php endif ?>
+        <?php if ($block->showPinterest()):?>
+        <span class="pinterest">
+                <a data-pin-do="buttonBookmark" href="https://www.pinterest.com/pin/create/button/"> </a>
+            </span>
+        <?php endif ?>
+        <?php if ($block->showEmail()):?>
+        <li>
+            <a class ="share-email action mailto friend"
+               href="mailto:hola@hola.me?subject=<?= $block->escapeHtml($productName); ?>&body=<?= $url ?>" target="_blank" >
+            </a>
+        </li>
+    <?php endif ?>
+    <?php if ($block->showCopy()):?>
+        <li>
+            <a class ="share-copy action copy friend" data-url="<?= $block->escapeUrl($currentUrl); ?>"
+               href="#"> <i class="fa fa-envelope">Copiar</i>
+            </a>
+        </li>
+    <?php endif ?>
+    <?php else: ?>
+        <div class="social-message"></div>
+        <ul class="social">
+        <?php if ($block->showFacebook()):?>
+            <li>
+                <a href="https://www.facebook.com/sharer.php?u=<?= urlencode($block->escapeUrl($currentUrl));?>&link=<?=$url;?>&caption=<?=$block->escapeHtml($productName);?>&description=Tienda%20IUSA%20lo%20tiene%20Todo.%20Entra,%20compra%20y%20comprueba&picture=<?=$block->getProductImage()?>"
+                    target="_blank">
+                    <i class="fa fa-facebook"></i>
+                </a>
+            </li>
+        <?php endif ?>
+        <?php if ($block->showTwitter()):?>
+            <li><a href="https://twitter.com/share?text=<?= $block->escapeHtml($productName); ?>&via=Tienda&hashtags=HashtagTienda&url=<?= $url ?>" target="_blank"><i class="fa fa-twitter"></i></a></li>
+        <?php endif ?>
+        <?php if ($block->showGPlus()):?>
+            <li><a href="https://plus.google.com/share?url=<?= urlencode($block->escapeUrl($currentUrl)); ?>" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+        <?php endif ?>
+        <?php if ($block->showWhatsapp()):?>
+            <li>
+                <a class ="share-whatsapp" href="https://api.whatsapp.com/send?text=<?=$productName;?>. Tienda IUSA lo tiene Todo. Entra, compra y comprueba. <?= $url ?>" target="_blank" ><i class="fa fa-whatsapp"></i></a>
+            </li>
+        <?php endif ?>
+        <?php if ($block->showPinterest()):?>
+            <li><a href="http://pinterest.com/pin/create/button/?url=<?= urlencode($block->escapeUrl($currentUrl)); ?>&description=<?= $productName; ?>" target="_blank"><i class="fa fa-pinterest"></i></a></li>
+        <?php endif ?>
+        <?php if ($block->showEmail()):?>
+            <li>
+                <a class ="share-email action mailto friend"
+                   href="mailto:hola@hola.me?subject=<?= $block->escapeHtml($productName); ?>&body=<?= $url ?>" target="_blank" > <i class="fa fa-envelope"></i>
+                </a>
+            </li>
+        <?php endif ?>
+        <?php if ($block->showCopy()):?>
+            <li>
+                <a class ="share-copy action copy friend" data-url="<?= $block->escapeUrl($currentUrl); ?>"
+                   href="#"> <i class="fa fa-envelope">Copiar</i>
+                </a>
+            </li>
+        <?php endif ?>
+        </ul>
+    <?php endif ?>
+</div>
+
+<script>
+    require(['jquery'],
+        function($) {
+            $('.share-copy').on('click', function () {
+                    let copyLink = this.getAttribute("data-url");
+
+                    var id = 'copy_post';
+                    var aux = document.createElement("input");
+                    aux.setAttribute("value", copyLink);
+                    aux.setAttribute("id", id);
+                    document.body.appendChild(aux);
+                    aux.select();
+                    document.execCommand("copy");
+
+                    alert("El enlace fue copiado");
+            });
+
+
+    });
+</script>
+
